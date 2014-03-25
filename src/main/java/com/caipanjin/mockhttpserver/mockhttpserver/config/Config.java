@@ -79,6 +79,14 @@ public class Config {
         @XNode("@value")
         private String value;
 
+        ReqParam() {
+        }
+
+        ReqParam(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
         public String getName() {
             return name;
         }

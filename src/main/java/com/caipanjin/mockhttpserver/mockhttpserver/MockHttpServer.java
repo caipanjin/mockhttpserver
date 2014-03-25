@@ -46,7 +46,7 @@ public class MockHttpServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port;
+        /*int port;
         String configFilePath;
         if (args.length > 1) {
             port = Integer.parseInt(args[0]);
@@ -55,7 +55,8 @@ public class MockHttpServer {
 
         } else {
             System.out.println("Usage: java MockHttpServer <port> <configFilePath>");
-        }
+        }*/
+        new MockHttpServer(8080, null).run();
 
     }
 }

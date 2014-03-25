@@ -7,6 +7,7 @@ package com.caipanjin.mockhttpserver.mockhttpserver;
 
 import com.caipanjin.mockhttpserver.mockhttpserver.config.Config;
 import com.caipanjin.mockhttpserver.mockhttpserver.config.ConfigManager;
+import com.google.common.collect.Maps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -50,15 +51,8 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
             }
 
             buf.setLength(0);
-            final String reqUri = request.getUri();
-            if(reqUri != null){
-                Config config = ConfigManager.getConfig(request.getUri());
-                if(config != null){
-                    buf.append(config.getResponse());
-                }
-            }
 
-
+            Map<String,String> requestParams = Maps.newHashMap();
             QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
             Map<String, List<String>> params = queryStringDecoder.parameters();
             if (!params.isEmpty()) {
@@ -66,44 +60,22 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
                     String key = p.getKey();
                     List<String> vals = p.getValue();
                     for (String val : vals) {
-                        buf.append("PARAM: ").append(key).append(" = ").append(val).append("\r\n");
+                        requestParams.put(key, val);
                     }
                 }
-                buf.append("\r\n");
             }
 
-            appendDecoderResult(buf, request);
-        }
-
-        if (msg instanceof HttpContent) {
-            HttpContent httpContent = (HttpContent) msg;
-
-            ByteBuf content = httpContent.content();
-            if (content.isReadable()) {
-                buf.append("CONTENT: ");
-                buf.append(content.toString(CharsetUtil.UTF_8));
-                buf.append("\r\n");
-                appendDecoderResult(buf, request);
-            }
-
-            if (msg instanceof LastHttpContent) {
-                buf.append("END OF CONTENT\r\n");
-
-                LastHttpContent trailer = (LastHttpContent) msg;
-                if (!trailer.trailingHeaders().isEmpty()) {
-                    buf.append("\r\n");
-                    for (String name: trailer.trailingHeaders().names()) {
-                        for (String value: trailer.trailingHeaders().getAll(name)) {
-                            buf.append("TRAILING HEADER: ");
-                            buf.append(name).append(" = ").append(value).append("\r\n");
-                        }
-                    }
-                    buf.append("\r\n");
+            final String reqUri = request.getUri();
+            if(reqUri != null){
+                Config config = ConfigManager.getConfig(reqUri, requestParams);
+                if(config != null){
+                    buf.append(config.getResponse());
                 }
-
-                writeResponse(trailer, ctx);
             }
+
+            writeResponse(ctx);
         }
+
 
     }
 
@@ -118,12 +90,12 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
         buf.append("\r\n");
     }
 
-    private boolean writeResponse(HttpObject currentObj, ChannelHandlerContext ctx) {
+    private boolean writeResponse(ChannelHandlerContext ctx) {
         // Decide whether to close the connection or not.
         boolean keepAlive = isKeepAlive(request);
         // Build the response object.
         FullHttpResponse response = new DefaultFullHttpResponse(
-                HTTP_1_1, currentObj.getDecoderResult().isSuccess()? OK : BAD_REQUEST,
+                HTTP_1_1, OK,
                 Unpooled.copiedBuffer(buf.toString(), CharsetUtil.UTF_8));
 
         response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
@@ -134,22 +106,6 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
             // Add keep alive header as per:
             // - http://www.w3.org/Protocols/HTTP/1.1/draft-ietf-http-v11-spec-01.html#Connection
             response.headers().set(CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-        }
-
-        // Encode the cookie.
-        String cookieString = request.headers().get(COOKIE);
-        if (cookieString != null) {
-            Set<Cookie> cookies = CookieDecoder.decode(cookieString);
-            if (!cookies.isEmpty()) {
-                // Reset the cookies if necessary.
-                for (Cookie cookie: cookies) {
-                    response.headers().add(SET_COOKIE, ServerCookieEncoder.encode(cookie));
-                }
-            }
-        } else {
-            // Browser sent no cookie.  Add some.
-            response.headers().add(SET_COOKIE, ServerCookieEncoder.encode("key1", "value1"));
-            response.headers().add(SET_COOKIE, ServerCookieEncoder.encode("key2", "value2"));
         }
 
         // Write the response.

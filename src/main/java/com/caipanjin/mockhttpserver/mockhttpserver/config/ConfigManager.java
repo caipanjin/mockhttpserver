@@ -6,6 +6,7 @@
 package com.caipanjin.mockhttpserver.mockhttpserver.config;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -20,6 +21,14 @@ import java.util.Set;
  */
 public class ConfigManager {
     private static Map<String, Config> configMap = Maps.newConcurrentMap();
+    static{
+        Config config = new Config();
+        config.setReqUri("/risk-rcfs/query/queryCustRate.htm");
+        config.setId("test");
+        config.setMethod("POST");
+        config.setResponse("{\"totalFailureAmt\":\"0\",\"transType\":\"01\",\"_retCode\":\"000000\",\"customerId\":\"9999999\",\"_errMsg\":\"请求成功\",\"totalSuccessCnt\":\"0\",\"totalSuccessAmt\":\"0\",\"_sysRet\":\"OK\",\"totalAmt\":\"0\",\"totalCnt\":\"0\",\"totalFailureCnt\":\"0\",\"regionType\":\"PASS_BY_10MINS\"}");
+        addConfig(config);
+    }
 
     public static void addConfig(Config config){
         Preconditions.checkNotNull(config);
@@ -42,7 +51,8 @@ public class ConfigManager {
         configMap.remove(config.getReqUri());
     }
 
-    public static Config getConfig(String reqUri){
+    public static Config getConfig(String reqUri, Map<String,String> matchParams){
+        //TODO:add params match logic
         return configMap.get(reqUri);
     }
 }
