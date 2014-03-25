@@ -3,8 +3,10 @@
  *     平安付
  * Copyright (c) 2013-2014 PingAnFu,Inc.All Rights Reserved.
  */
-package com.pinganfu.mockhttpserver;
+package com.caipanjin.mockhttpserver.mockhttpserver;
 
+import com.caipanjin.mockhttpserver.mockhttpserver.config.Config;
+import com.caipanjin.mockhttpserver.mockhttpserver.config.ConfigManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,7 +25,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.*;
 import static io.netty.handler.codec.http.HttpVersion.*;
 
 /**
- * com.pinganfu.mockhttpserver.MockHttpServerHandler
+ * MockHttpServerHandler
  * Author: 蔡盘进 (email:caipanjin125@pingan.com.cn)
  * Date: 14-3-20
  * Time: 下午10:27
@@ -48,22 +50,14 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
             }
 
             buf.setLength(0);
-            buf.append("WELCOME TO THE WILD WILD WEB SERVER\r\n");
-            buf.append("===================================\r\n");
-
-            buf.append("VERSION: ").append(request.getProtocolVersion()).append("\r\n");
-            buf.append("HOSTNAME: ").append(getHost(request, "unknown")).append("\r\n");
-            buf.append("REQUEST_URI: ").append(request.getUri()).append("\r\n\r\n");
-
-            HttpHeaders headers = request.headers();
-            if (!headers.isEmpty()) {
-                for (Map.Entry<String, String> h: headers) {
-                    String key = h.getKey();
-                    String value = h.getValue();
-                    buf.append("HEADER: ").append(key).append(" = ").append(value).append("\r\n");
+            final String reqUri = request.getUri();
+            if(reqUri != null){
+                Config config = ConfigManager.getConfig(request.getUri());
+                if(config != null){
+                    buf.append(config.getResponse());
                 }
-                buf.append("\r\n");
             }
+
 
             QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
             Map<String, List<String>> params = queryStringDecoder.parameters();

@@ -3,7 +3,7 @@
  *     平安付
  * Copyright (c) 2013-2014 PingAnFu,Inc.All Rights Reserved.
  */
-package com.pinganfu.mockhttpserver.config;
+package com.caipanjin.mockhttpserver.mockhttpserver.config;
 
 import org.nuxeo.common.xmap.annotation.XNode;
 import org.nuxeo.common.xmap.annotation.XNodeList;
@@ -14,21 +14,63 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * com.pinganfu.mockhttpserver.config.Config
+ * Config
  * Author: 蔡盘进 (email:caipanjin125@pingan.com.cn)
  * Date: 14-3-20
  * Time: 下午10:41
  */
 @XObject("Config")
 public class Config {
+    @XNode("@id")
+    private String id;
     @XNode("@URI")
     private String reqUri;
     @XNode("@METHOD")
     private String method;
     @XNodeList(value = "Params", type = ArrayList.class, componentType = ReqParam.class)
     private List<ReqParam> reqParams;
+    @XNode("Response")
     private String response;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getReqUri() {
+        return reqUri;
+    }
+
+    public void setReqUri(String reqUri) {
+        this.reqUri = reqUri;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public List<ReqParam> getReqParams() {
+        return reqParams;
+    }
+
+    public void setReqParams(List<ReqParam> reqParams) {
+        this.reqParams = reqParams;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
 
     @XObject
     static class ReqParam {

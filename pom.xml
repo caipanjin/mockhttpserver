@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>mockhttpserver</groupId>
+    <groupId>com.caipanjin</groupId>
     <artifactId>mockhttpserver</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -18,6 +18,11 @@
             <groupId>org.nuxeo.common</groupId>
             <artifactId>nuxeo-common</artifactId>
             <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>16.0</version>
         </dependency>
     </dependencies>
 </project>

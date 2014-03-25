@@ -3,7 +3,7 @@
  *     平安付
  * Copyright (c) 2013-2014 PingAnFu,Inc.All Rights Reserved.
  */
-package com.pinganfu.mockhttpserver;
+package com.caipanjin.mockhttpserver.mockhttpserver;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -13,7 +13,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 
 /**
- * com.pinganfu.mockhttpserver.MockHttpServer
+ * MockHttpServer
  * Author: 蔡盘进 (email:caipanjin125@pingan.com.cn)
  * Date: 14-3-20
  * Time: 下午10:24

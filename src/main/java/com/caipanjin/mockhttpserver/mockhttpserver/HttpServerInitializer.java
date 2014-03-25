@@ -3,23 +3,16 @@
  *     平安付
  * Copyright (c) 2013-2014 PingAnFu,Inc.All Rights Reserved.
  */
-package com.pinganfu.mockhttpserver;
+package com.caipanjin.mockhttpserver.mockhttpserver;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.http.HttpClientCodec;
-import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.ssl.SslHandler;
-
-import javax.net.ssl.SSLEngine;
 
 /**
- * com.pinganfu.mockhttpserver.HttpServerInitializer
+ * HttpServerInitializer
  * Author: 蔡盘进 (email:caipanjin125@pingan.com.cn)
  * Date: 14-3-20
  * Time: 下午10:26
