@@ -66,14 +66,14 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
             }
 
             final String reqUri = request.getUri();
-            if(reqUri != null){
-                Config config = ConfigManager.getConfig(reqUri, requestParams);
-                if(config != null){
-                    buf.append(config.getResponse());
-                }
-            }
 
-            writeResponse(ctx);
+            Config config = ConfigManager.getConfig(reqUri, requestParams);
+            if(config != null){
+                buf.append(config.getResponse());
+                writeResponse(ctx,OK);
+            }else{
+                writeResponse(ctx,NOT_FOUND);
+            }
         }
 
 
@@ -90,12 +90,12 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
         buf.append("\r\n");
     }
 
-    private boolean writeResponse(ChannelHandlerContext ctx) {
+    private boolean writeResponse(ChannelHandlerContext ctx, HttpResponseStatus status) {
         // Decide whether to close the connection or not.
         boolean keepAlive = isKeepAlive(request);
         // Build the response object.
         FullHttpResponse response = new DefaultFullHttpResponse(
-                HTTP_1_1, OK,
+                HTTP_1_1, status,
                 Unpooled.copiedBuffer(buf.toString(), CharsetUtil.UTF_8));
 
         response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");

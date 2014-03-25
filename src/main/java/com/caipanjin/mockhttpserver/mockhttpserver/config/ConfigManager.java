@@ -24,10 +24,24 @@ public class ConfigManager {
     static{
         Config config = new Config();
         config.setReqUri("/risk-rcfs/query/queryCustRate.htm");
-        config.setId("test");
+        config.setId("queryCustRate");
         config.setMethod("POST");
         config.setResponse("{\"totalFailureAmt\":\"0\",\"transType\":\"01\",\"_retCode\":\"000000\",\"customerId\":\"9999999\",\"_errMsg\":\"请求成功\",\"totalSuccessCnt\":\"0\",\"totalSuccessAmt\":\"0\",\"_sysRet\":\"OK\",\"totalAmt\":\"0\",\"totalCnt\":\"0\",\"totalFailureCnt\":\"0\",\"regionType\":\"PASS_BY_10MINS\"}");
         addConfig(config);
+
+        Config config2 = new Config();
+        config2.setReqUri("/risk-rcfs/query/queryCustCnt.htm");
+        config2.setId("queryCustCnt");
+        config2.setMethod("POST");
+        config2.setResponse("{maxSuccessCnt=0, maxCnt=0, successCnt=null, totalCnt=null}");
+        addConfig(config2);
+
+        Config config3 = new Config();
+        config3.setReqUri("/risk-rcfs/query/queryCustCnt.htm");
+        config3.setId("queryCustAmt");
+        config3.setMethod("POST");
+        config3.setResponse("{successAmt_C=null, totalAmt_C=null, minAmt_C=0, maxSuccessAmt_C=0, minSuccessAmt_C=0, maxAmt_C=0}");
+        addConfig(config3);
     }
 
     public static void addConfig(Config config){
