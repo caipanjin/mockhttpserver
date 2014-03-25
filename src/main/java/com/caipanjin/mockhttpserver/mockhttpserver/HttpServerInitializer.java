@@ -5,6 +5,7 @@
  */
 package com.caipanjin.mockhttpserver.mockhttpserver;
 
+import com.caipanjin.mockhttpserver.mockhttpserver.handler.MockHttpServerHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

@@ -3,10 +3,11 @@
  *     平安付
  * Copyright (c) 2013-2014 PingAnFu,Inc.All Rights Reserved.
  */
-package com.caipanjin.mockhttpserver.mockhttpserver;
+package com.caipanjin.mockhttpserver.mockhttpserver.handler;
 
 import com.caipanjin.mockhttpserver.mockhttpserver.config.Config;
 import com.caipanjin.mockhttpserver.mockhttpserver.config.ConfigManager;
+import com.caipanjin.mockhttpserver.mockhttpserver.util.DigestUtil;
 import com.google.common.collect.Maps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -44,6 +45,10 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof HttpRequest) {
+            //set start time
+            long startTime = System.currentTimeMillis();
+            ctx.channel().attr(AttributeKeys.START_TIME).set(startTime);
+
             HttpRequest request = this.request = (HttpRequest) msg;
 
             if (is100ContinueExpected(request)) {
@@ -74,6 +79,11 @@ public class MockHttpServerHandler extends SimpleChannelInboundHandler<Object> {
             }else{
                 writeResponse(ctx,NOT_FOUND);
             }
+
+            //digest log
+            long elapseTime = System.currentTimeMillis() - startTime;
+            DigestUtil.digestServiceIn(reqUri + "处理耗时", elapseTime, true);
+            ctx.channel().attr(AttributeKeys.START_TIME).remove();
         }
 
 
