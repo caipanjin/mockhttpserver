@@ -1,8 +1,4 @@
-/**
- *
- *     平安付
- * Copyright (c) 2013-2014 PingAnFu,Inc.All Rights Reserved.
- */
+
 package com.caipanjin.mockhttpserver.mockhttpserver;
 
 import com.caipanjin.mockhttpserver.mockhttpserver.handler.MockHttpServerHandler;
