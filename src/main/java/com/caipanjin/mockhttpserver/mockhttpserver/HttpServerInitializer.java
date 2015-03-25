@@ -10,7 +10,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 
 /**
  * HttpServerInitializer
- * Author: 蔡盘进 (email:caipanjin125@pingan.com.cn)
+ * Author: 蔡盘进 
  * Date: 14-3-20
  * Time: 下午10:26
  */
